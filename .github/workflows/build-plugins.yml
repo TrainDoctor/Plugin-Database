@@ -54,9 +54,6 @@ jobs:
 
     - name: Pull frontend builder image
       run: docker pull ghcr.io/steamdeckhomebrew/builder:latest
-    
-    - name: Grab backend builder image
-      run: docker pull ghcr.io/steamdeckhomebrew/builder:latest
 
     - name: Log out of GitHub Container Registry
       run: |
@@ -65,6 +62,7 @@ jobs:
     - name: Detect edited files/plugins
       id: list-files
       run: |
+        pushd plugins
         files=()
         if [[ "${{ steps.changed-files.outputs.all_changed_files }}" == *".github/workflows/build-plugins.yml"* ]]; 
         then
@@ -79,8 +77,10 @@ jobs:
             [ "$rest" = "${rest/,/}" ] && rest= || rest=${rest#*,}
             files+=($(cut -d/ -f2 <<< $str))
           done <<< "$files"
+          printf "%s\n" "${files[@]}" | sort -u
         fi
-        echo ::set-output name=edited_files::"$files"
+        popd
+        echo ::set-output name=edited_files::$files
     
     # - name: Build plugin backends
     #   run: |
