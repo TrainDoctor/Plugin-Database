@@ -52,16 +52,19 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Pull builder image
+    - name: Pull frontend builder image
+      run: docker pull ghcr.io/steamdeckhomebrew/builder:latest
+    
+    - name: Grab backend builder image
       run: docker pull ghcr.io/steamdeckhomebrew/builder:latest
 
     - name: Log out of GitHub Container Registry
       run: |
         docker logout ghcr.io
 
-    - name: Build plugins
+    - name: Detect edited files/plugins
+      id: list-files
       run: |
-        pushd plugins
         files=()
         if [[ "${{ steps.changed-files.outputs.all_changed_files }}" == *".github/workflows/build-plugins.yml"* ]]; 
         then
@@ -76,12 +79,30 @@ jobs:
             [ "$rest" = "${rest/,/}" ] && rest= || rest=${rest#*,}
             files+=($(cut -d/ -f2 <<< $str))
           done <<< "$files"
-          #printf "%s\n" "${files[@]}" | sort -u
         fi
+        echo ::set-output name=edited_files::"$files"
+    
+    # - name: Build plugin backends
+    #   run: |
+    #     files="${{ steps.list-files.outputs.edited_files }}""
+    #     pushd plugins
+    #     for plugin in $(printf "%s\n" "${files[@]}" | sort -u); do
+    #       pushd $plugin
+    #       docker run --rm -i -v $PWD:/plugin -v /tmp/output/$plugin:/out ghcr.io/steamdeckhomebrew/builder:latest
+    #       echo Built $plugin frontend
+    #       ls -lla /tmp/output/$plugin
+    #       popd
+    #     done
+    #     popd
+
+    - name: Build plugin frontends
+      run: |
+        files="${{ steps.list-files.outputs.edited_files }}""
+        pushd plugins
         for plugin in $(printf "%s\n" "${files[@]}" | sort -u); do
           pushd $plugin
           docker run --rm -i -v $PWD:/plugin -v /tmp/output/$plugin:/out ghcr.io/steamdeckhomebrew/builder:latest
-          echo Built $plugin
+          echo Built $plugin frontend
           ls -lla /tmp/output/$plugin
           popd
         done
