@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - backend-building
     paths:
       - "plugins/**"
       - ".github/workflows/build-plugins.yml"
