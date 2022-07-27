@@ -87,11 +87,12 @@ jobs:
       run: |
         files="${{ steps.list-files.outputs.edited_files }}"
         pushd plugins
-        echo $plugins
+        echo "Plugins: $(dirs -v)"
         for plugin in $(printf "%s\n" "${files[@]}" | sort -u); do
           pushd $plugin
+          echo "Plugin: $plugin"
           echo Built $plugin frontend
-          ls -lla /tmp/output/$plugin
+          # ls -lla /tmp/output/$plugin
           popd
         done
         popd
