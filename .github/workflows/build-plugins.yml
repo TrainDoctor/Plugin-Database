@@ -80,7 +80,7 @@ jobs:
           printf "%s\n" "${files[@]}" | sort -u
         fi
         popd
-        echo ::set-output name=edited_files::$files
+        echo ::set-output name=edited_files::${files[@]}
     
     # - name: Build plugin backends
     #   run: |
