@@ -83,18 +83,18 @@ jobs:
         popd
         echo ::set-output name=edited_files::${files[@]}
     
-    # - name: Build plugin backends
-    #   run: |
-    #     files="${{ steps.list-files.outputs.edited_files }}"
-    #     pushd plugins
-    #     for plugin in $(printf "%s\n" "${files[@]}" | sort -u); do
-    #       pushd $plugin
-    #       docker run --rm -i -v $PWD:/plugin -v /tmp/output/$plugin:/out ghcr.io/steamdeckhomebrew/builder:latest
-    #       echo Built $plugin frontend
-    #       ls -lla /tmp/output/$plugin
-    #       popd
-    #     done
-    #     popd
+    - name: Build plugin backends
+      run: |
+        files="${{ steps.list-files.outputs.edited_files }}"
+        pushd plugins
+        echo $plugins
+        for plugin in $(printf "%s\n" "${files[@]}" | sort -u); do
+          pushd $plugin
+          echo Built $plugin frontend
+          ls -lla /tmp/output/$plugin
+          popd
+        done
+        popd
 
     - name: Build plugin frontends
       run: |
