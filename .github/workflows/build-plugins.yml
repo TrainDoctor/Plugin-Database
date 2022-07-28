@@ -90,8 +90,10 @@ jobs:
         for plugin in $(printf "%s\n" "${files[@]}" | sort -u); do
           pushd $plugin
           dockerfile_exists=false
+          [ -d $PWD/backend/ ] && ls -lla $PWD/backend/
+          [ -d $PWD/backend/ ] || echo "Backend folder doesn't exist"
           [ -f $PWD/backend/Dockerfile ] && $dockerfile_exists=true
-          if [[ "$dockerfile_exists" = true ]] ; then
+          if [[ "$dockerfile_exists" = "true" ]] ; then
             mkdir $PWD/build
             docker build -f $PWD/backend/Dockerfile -t backend-$plugin .
             # docker run 
