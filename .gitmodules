@@ -11,6 +11,6 @@
 	path = plugins/SDH-CssLoader
 	url = https://github.com/suchmememanyskill/SDH-CssLoader
 [submodule "plugins/backend-template"]
-	path = plugins/backend-template
+	path = plugins/plugin-template
 	url = git@github.com:TrainDoctor/decky-plugin-template.git
 	branch = dockerfile-test
