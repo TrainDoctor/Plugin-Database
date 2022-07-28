@@ -94,7 +94,8 @@ jobs:
           [ -d $PWD/backend ] && echo "$(ls -lla $PWD/backend | grep Dockerfile)"
           [ -f $PWD/backend/Dockerfile ] && dockerfile_exists=true
           if [[ "$dockerfile_exists" == "true" ]]; then
-            mkdir $PWD/build
+            mkdir $PWD/build/
+            mkdir $PWD/build/backend
             docker build -f $PWD/backend/Dockerfile -t backend-$plugin .
             # docker run 
             echo Built $plugin backend
