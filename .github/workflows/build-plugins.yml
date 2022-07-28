@@ -89,17 +89,17 @@ jobs:
         pushd plugins
         for plugin in $(printf "%s\n" "${files[@]}" | sort -u); do
           pushd $plugin
-          dockerfile_exists=false
-          [ -d $PWD/backend/ ] && ls -lla $PWD/backend/
-          [ -d $PWD/backend/ ] || echo "Backend folder doesn't exist"
-          [ -f $PWD/backend/Dockerfile ] && $dockerfile_exists=true
-          if [[ "$dockerfile_exists" = "true" ]] ; then
+          echo "Detecting backend for plugin $plugin"
+          dockerfile_exists="false"
+          [ -d $PWD/backend ] && echo "$(ls -lla $PWD/backend | grep Dockerfile)"
+          [ -f $PWD/backend/Dockerfile ] && dockerfile_exists=true
+          if [[ "$dockerfile_exists" == "true" ]]; then
             mkdir $PWD/build
             docker build -f $PWD/backend/Dockerfile -t backend-$plugin .
             # docker run 
             echo Built $plugin backend
           else 
-            echo " Plugin $plugin does not have a backend"
+            echo "Plugin $plugin does not have a backend"
           fi
           # ls -lla /tmp/output/$plugin
           popd

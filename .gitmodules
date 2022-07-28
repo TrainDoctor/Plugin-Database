@@ -13,3 +13,4 @@
 [submodule "plugins/backend-template"]
 	path = plugins/backend-template
 	url = git@github.com:TrainDoctor/decky-plugin-template.git
+	branch = dockerfile-test
