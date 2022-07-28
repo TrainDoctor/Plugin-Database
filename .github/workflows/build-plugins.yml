@@ -141,17 +141,14 @@ jobs:
           zip -r $zipname "$plugin/dist" "$plugin/plugin.json" "$plugin/package.json"
           # Check if plugin has a defaults folder, if so, add "default" contents to root dir
           hasdefaults="$(find $plugin -maxdepth 1 -type d -name 'defaults' -printf '%P\n')"
-          if [ ! -z "$bin" && ! -z "$(ls -A "$plugin/$bin")" ]; then
+          if [ ! -z "$bin"] && ![ -z "$(ls -A "$plugin/$bin")" ]; then
             zip -r $zipname "$plugin/$bin"
           fi
           if [ ! -z "$hasdefaults" ]; then
             workingdir=$PWD
-            for item in "$plugin/defaults/*"; do
-              [ -d $item ] && echo "$item is a folder"
-              [ -f $item ] && echo "$item is a file"
-              # cd $plugin/defaults
-              zip -r $zipname $item
-            done
+            cd $plugin/defaults
+            zip -r $zipname *
+            cd "$workingdir"
           fi
           # Check if other files exist, and if they do, add them
           echo "$plugin/$license $plugin/$readme $plugin/$mainpy"
