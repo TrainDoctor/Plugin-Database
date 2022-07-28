@@ -145,10 +145,12 @@ jobs:
             zip -r $zipname "$plugin/$bin"
           fi
           if [ ! -z "$hasdefaults" ]; then
+            workingdir=$PWD
             for item in "$plugin/defaults/*"; do
               [ -d $item ] && echo "$item is a folder"
               [ -f $item ] && echo "$item is a file"
-              zip -r --verbose $item "$plugin/$item"
+              # cd $plugin/defaults
+              zip -r $zipname $item
             done
           fi
           # Check if other files exist, and if they do, add them
