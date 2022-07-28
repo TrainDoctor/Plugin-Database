@@ -89,8 +89,12 @@ jobs:
         pushd plugins
         for plugin in $(printf "%s\n" "${files[@]}" | sort -u); do
           pushd $plugin
-          mkdir $PWD/build
-          echo Built $plugin frontend
+          dockerfile_exists=false
+          [ -f $PWD/backend/Dockerfile ] && $dockerfile_exists=true
+          if [[ "$dockerfile_exists" = true ]] ; then
+            mkdir $PWD/build
+            echo Built $plugin backend
+          fi
           # ls -lla /tmp/output/$plugin
           popd
         done
@@ -131,7 +135,7 @@ jobs:
           if [ ! -z "$hasdefaults" ]; then
             for item in "$plugin/defaults/*"; do
               [ -d $item ] && echo "$item is a folder"
-              [ -f $item ] && echo "\t$item is a file"
+              [ -f $item ] && echo "$item is a file"
               zip -r --verbose $item "$plugin/$item"
             done
           fi
