@@ -87,10 +87,9 @@ jobs:
       run: |
         files="${{ steps.list-files.outputs.edited_files }}"
         pushd plugins
-        echo "Plugins: $(dirs -v)"
         for plugin in $(printf "%s\n" "${files[@]}" | sort -u); do
           pushd $plugin
-          echo "Plugin: $plugin"
+          mkdir $PWD/build
           echo Built $plugin frontend
           # ls -lla /tmp/output/$plugin
           popd
@@ -132,8 +131,8 @@ jobs:
           if [ ! -z "$hasdefaults" ]; then
             for item in "$plugin/defaults/*"; do
               [ -d $item ] && echo "$item is a folder"
-              [ -f $item ] && echo "$item is a file"
-              zip -r $item "$plugin/$item"
+              [ -f $item ] && echo "\t$item is a file"
+              zip -r --verbose $item "$plugin/$item"
             done
           fi
           # Check if other files exist, and if they do, add them
