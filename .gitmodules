@@ -32,3 +32,7 @@
 [submodule "plugins/FriendsFix"]
 	path = plugins/FriendsFix
 	url = https://git.catvibers.me/aa/FriendsFix.git
+[submodule "plugins/fantastic-testing"]
+	path = plugins/fantastic-testing
+	url = https://github.com/TrainDoctor/Fantastic
+	branch = backend-building-support
