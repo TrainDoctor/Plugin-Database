@@ -66,6 +66,7 @@ jobs:
     - name: Detect edited files/plugins
       id: list-files
       run: |
+        set -x
         pushd plugins
         files=()
         if [[ "${{ steps.changed-files.outputs.all_changed_files }}" == *".github/workflows/build-plugins.yml"* ]]; 
@@ -84,8 +85,7 @@ jobs:
           printf "%s\n" "${files[@]}" | sort -u
         fi
         popd
-        IFS=$'\n' sorted=($(sort -u <<<"$${files[@]}"))
-        unset $IFS
+        IFS=$'\n' sort -u <<<"$${files[*]}" | read -a sorted
         echo "${sorted[@]}"
         echo ::set-output name=edited_files::${files[@]}
     
