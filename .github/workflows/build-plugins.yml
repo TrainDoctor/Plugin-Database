@@ -68,23 +68,24 @@ jobs:
       run: |
         pushd plugins
         files=()
-        if [[ "${{ steps.changed-files.outputs.all_changed_files }}" == *".github/workflows/build-plugins.yml"* ]]; 
-        then
-          echo "Rebuilding all plugins due to workflow edit"
-          for file in ./plugins/*; do
-            files+=($(cut -d/ -f3 <<< $file))
-          done
-        else
-          rest="${{ steps.changed-files.outputs.all_changed_files }}"
-          while [ -n "$rest" ] ; do
-            str=${rest%%,*}
-            [ "$rest" = "${rest/,/}" ] && rest= || rest=${rest#*,}
-            files+=($(cut -d/ -f2 <<< $str))
-          done <<< "$files"
-          printf "%s\n" "${files[@]}" | sort -u
-        fi
+        # if [[ "${{ steps.changed-files.outputs.all_changed_files }}" == *".github/workflows/build-plugins.yml"* ]]; 
+        # then
+        #   echo "Rebuilding all plugins due to workflow edit"
+        #   for file in ./plugins/*; do
+        #     files+=($(cut -d/ -f3 <<< $file))
+        #   done
+        # else
+        rest="${{ steps.changed-files.outputs.all_changed_files }}"
+        while [ -n "$rest" ] ; do
+          str=${rest%%,*}
+          [ "$rest" = "${rest/,/}" ] && rest= || rest=${rest#*,}
+          files+=($(cut -d/ -f2 <<< $str))
+        done <<< "$files"
+        printf "%s\n" "${files[@]}" | sort -u
+        # fi
         popd
-        IFS=$'\n' sorted=($(sort -u <<<"$${files[@]}"))
+        # read -a files -d',' <<<"${{ steps.list-files.outputs.edited_files }}"
+        IFS=$'\n' sort -u <<<"$${files[*]}" | read -a sorted
         unset $IFS
         echo "${sorted[@]}"
         echo ::set-output name=edited_files::${files[@]}
