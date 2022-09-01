@@ -78,8 +78,19 @@ jobs:
         else
           rest="${{ steps.changed-files.outputs.all_changed_files }}"
           while [ -n "$rest" ] ; do
+            found=0
             str=${rest%%,*}
             [ "$rest" = "${rest/,/}" ] && rest= || rest=${rest#*,}
+            for i in "${files[@]}"
+            do
+              if [[ "$str" == "$i" ]]; then
+                found=1
+                break
+              fi
+            done
+            if [[ "$found" -eq 0 ]]; then
+              continue
+            fi
             files+=($(cut -d/ -f2 <<< $str))
           done <<< "$files"
           printf "%s\n" "${files[@]}" | sort -u
