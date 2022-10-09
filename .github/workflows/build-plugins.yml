@@ -188,7 +188,11 @@ jobs:
 
           if [ ! -z "$hasdefaults" ]; then
             if [ ! -f "defaults.txt" ]; then
-              find -printf '%p' $plugin/defaults -mindepth 1 -maxdepth 2 -type d,f -name '*' -exec zip -r $zipname $plugin/$(basename {}) \;
+              find $plugin/defaults -mindepth 1 -maxdepth 2 -type d,f -name '*' -exec sh -c '
+                object="$1"
+                name="$(basename $object)"
+                zip -r $zipname $plugin/$name
+              ' find-sh {} + ;
             else
               printf "defaults.txt found in defaults folder, please remove either defaults.txt or the defaults folder.\n"
               exit 1
