@@ -194,7 +194,7 @@ jobs:
                   name="$(basename $object)"
                   cp -r "$object" $plugin/$name
                   zip -r $zipname $plugin/$name
-                don
+                done
               ' find-sh {} + ;
             else
               printf "defaults.txt found in defaults folder, please remove either defaults.txt or the defaults folder.\n"
