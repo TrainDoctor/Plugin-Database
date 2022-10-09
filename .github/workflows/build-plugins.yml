@@ -188,9 +188,8 @@ jobs:
           fi
 
           if [ ! -z "$hasdefaults" ]; then
-            workingdir=$PWD
+            export workingdir=$PWD
             cd $plugin/defaults
-            export defaults=()
             export plugin="$plugin"
             export zipname="$zipname"
             if [ ! -f "defaults.txt" ]; then
@@ -199,8 +198,8 @@ jobs:
                   outdir="/tmp/output"
                   name="$(basename $object)"
                   sudo cp -r "$object" $outdir/$plugin/$name
-                  defaults+=("$name")
-                  export defaults="${defaults[@]}"
+                  cd $workingdir
+                  zip -r $zipname $plugin/$name
                 done
               ' find-sh {} + ;
             else
@@ -208,10 +207,6 @@ jobs:
               exit 1
             fi
             cd "$workingdir"
-            for object in "${defaults[@]}"
-            do
-              zip -r $zipname $plugin/$object
-            done
           fi
 
           # Check if other files exist, and if they do, add them
