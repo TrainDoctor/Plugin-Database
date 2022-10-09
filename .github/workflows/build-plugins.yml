@@ -23,6 +23,7 @@ jobs:
     
     steps:
     - name: Checkout
+      if: ${{ !env.ACT }}
       uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
       with:
         fetch-depth: 0
@@ -40,6 +41,7 @@ jobs:
           .github/workflows/build-plugins.yml
 
     - name: Cache Docker images
+      if: ${{ !env.ACT }}
       uses: satackey/action-docker-layer-caching@46d2c640b1d8ef50d185452ad6fb324e6bd1d052
 
     - name: Login to GitHub Container Registry
@@ -49,6 +51,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Wait for other runs to complete
+      if: ${{ !env.ACT }}
       uses: softprops/turnstyle@8db075d65b19bf94e6e8687b504db69938dc3c65
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -188,14 +191,16 @@ jobs:
             cd $plugin/defaults
             for entry in $plugin/defaults
             do
-              cp $plugin/defaults/$entry $plugin/$entry
+              filename=$(basename $entry)
+              cp $plugin/defaults/$filename $plugin/$filename
               # defaultfiles+=($entry)
               # echo "${defaultfiles[@]}"
             done
             if [ ! -f "defaults.txt" ]; then
               for entry in $plugin/defaults
               do
-                zip -r $zipname $plugin/$entry
+                filename=$(basename $entry)
+                zip -r $zipname $plugin/$filename
                 # defaultfiles+=($entry)
                 # echo "${defaultfiles[@]}"
               done
@@ -205,7 +210,7 @@ jobs:
             fi
             cd "$workingdir"
           fi
-          
+
           # Check if other files exist, and if they do, add them
           echo "license:$plugin/$license readme:$plugin/$readme"
           if [ ! -z "$license" ]; then
@@ -218,13 +223,14 @@ jobs:
         popd
 
     - name: Upload Artifacts to Github
+      if: ${{ !env.ACT }}
       uses: actions/upload-artifact@v3
       with:
         name: plugins
         path: /tmp/zips/*
 
     - name: Upload plugins
-      if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.upload)) }}
+      if: ${{ !env.ACT && github.ref == 'refs/heads/main' && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.upload)) }}
       run: |
         shopt -s dotglob
         for plugin in /tmp/output/*; do
