@@ -140,24 +140,25 @@ jobs:
     #     done
     #     popd
 
-    # - name: Build plugin frontends
-    #   run: |
-    #     IFS=' ' read -ra files <<< "${{ steps.list-files.outputs.edited_files }}"
-    #     pushd plugins
-    #     for plugin in $(printf "%s\n" "${files[@]}" | sort -u); do
-    #       pushd $plugin
-    #       docker run --rm -i -v $PWD:/plugin -v /tmp/output/$plugin:/out ghcr.io/steamdeckhomebrew/builder:latest
-    #       echo Built $plugin frontend
-    #       ls -lla /tmp/output/$plugin
-    #       popd
-    #     done
-    #     popd
+    - name: Build plugin frontends
+      run: |
+        IFS=' ' read -ra files <<< "${{ steps.list-files.outputs.edited_files }}"
+        pushd plugins
+        for plugin in $(printf "%s\n" "${files[@]}" | sort -u); do
+          pushd $plugin
+          docker run --rm -i -v $PWD:/plugin -v /tmp/output/$plugin:/out ghcr.io/steamdeckhomebrew/builder:latest
+          echo Built $plugin frontend
+          ls -lla /tmp/output/$plugin
+          popd
+        done
+        popd
         
     - name: Zip Plugins
       run: |
         set -x
         shopt -s dotglob
         mkdir -p /tmp/zips/
+        mkdir -p /tmp/output/
         pushd /tmp/output
         for abs_plugin in /tmp/output/*; do
           plugin=$(basename $abs_plugin)
