@@ -196,7 +196,7 @@ jobs:
                 for object do
                   outdir="/tmp/output"
                   name="$(basename $object)"
-                  cp -r "$object" $outdir/$plugin/$name
+                  sudo cp -r "$object" $outdir/$plugin/$name
                   zip -r $zipname $outdir/$plugin/$name
                 done
               ' find-sh {} + ;
