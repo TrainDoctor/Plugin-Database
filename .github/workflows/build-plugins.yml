@@ -184,12 +184,28 @@ jobs:
 
           if [ ! -z "$hasdefaults" ]; then
             workingdir=$PWD
+            # defaultfiles=()
             cd $plugin/defaults
+            for entry in $plugin/defaults
+            do
+              cp $plugin/defaults/$entry $plugin/$entry
+              # defaultfiles+=($entry)
+              # echo "${defaultfiles[@]}"
+            done
             if [ ! -f "defaults.txt" ]; then
-              zip -r $zipname *
+              for entry in $plugin/defaults
+              do
+                zip -r $zipname $plugin/$entry
+                # defaultfiles+=($entry)
+                # echo "${defaultfiles[@]}"
+              done
+            else
+              printf "defaults.txt found in defaults folder, please remove either defaults.txt or the defaults folder.\n"
+              exit 1
             fi
             cd "$workingdir"
           fi
+          
           # Check if other files exist, and if they do, add them
           echo "license:$plugin/$license readme:$plugin/$readme"
           if [ ! -z "$license" ]; then
