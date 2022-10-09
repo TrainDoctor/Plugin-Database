@@ -186,29 +186,35 @@ jobs:
           fi
 
           if [ ! -z "$hasdefaults" ]; then
-            workingdir=$PWD
-            # defaultfiles=()
-            cd $plugin/defaults
-            for entry in $plugin/defaults
-            do
-              filename=$(basename $entry)
-              cp $plugin/defaults/$filename $plugin/$filename
-              # defaultfiles+=($entry)
-              # echo "${defaultfiles[@]}"
-            done
             if [ ! -f "defaults.txt" ]; then
-              for entry in $plugin/defaults
-              do
-                filename=$(basename $entry)
-                zip -r $zipname $plugin/$filename
-                # defaultfiles+=($entry)
-                # echo "${defaultfiles[@]}"
-              done
+              find $plugin/defaults -mindepth 1 -maxdepth 2 -type d,f -name '*' -exec zip -r $zipname {} \;
             else
               printf "defaults.txt found in defaults folder, please remove either defaults.txt or the defaults folder.\n"
               exit 1
             fi
-            cd "$workingdir"
+            
+            # workingdir=$PWD 
+            # cd $plugin/defaults
+            # for entry in $plugin/defaults
+            # do
+            #   filename=$(basename $entry)
+            #   cp $plugin/defaults/$filename $plugin/$filename
+            #   # defaultfiles+=($entry)
+            #   # echo "${defaultfiles[@]}"
+            # done
+            # if [ ! -f "defaults.txt" ]; then
+            #   for entry in $plugin/defaults
+            #   do
+            #     filename=$(basename $entry)
+            #     zip -r $zipname $plugin/$filename
+            #     # defaultfiles+=($entry)
+            #     # echo "${defaultfiles[@]}"
+            #   done
+            # else
+            #   printf "defaults.txt found in defaults folder, please remove either defaults.txt or the defaults folder.\n"
+            #   exit 1
+            # fi
+            # cd "$workingdir"
           fi
 
           # Check if other files exist, and if they do, add them
