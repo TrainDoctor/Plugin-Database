@@ -190,6 +190,7 @@ jobs:
           if [ ! -z "$hasdefaults" ]; then
             workingdir=$PWD
             cd $plugin/defaults
+            export plugin="$plugin"
             if [ ! -f "defaults.txt" ]; then
               find $plugin/defaults -mindepth 1 -maxdepth 2 -type d,f -name '*' -exec sh -c '
                 for object do
@@ -198,7 +199,7 @@ jobs:
                   cp -r "$object" $plugin/$name
                   zip -r $zipname $plugin/$name
                 done
-              ' find-sh {} $plugin + ;
+              ' find-sh {} + ;
             else
               printf "defaults.txt found in defaults folder, please remove either defaults.txt or the defaults folder.\n"
               exit 1
