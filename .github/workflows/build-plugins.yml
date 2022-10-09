@@ -192,12 +192,12 @@ jobs:
             cd $plugin/defaults
             export plugin="$plugin"
             if [ ! -f "defaults.txt" ]; then
-              find $plugin/defaults -mindepth 1 -maxdepth 2 -type d,f -name '*' -exec sh -c '
+              find . -mindepth 1 -maxdepth 2 -type d,f -name '*' -exec sh -c '
                 for object do
-                  plugin="$2"
+                  outdir="/tmp/output"
                   name="$(basename $object)"
-                  cp -r "$object" $plugin/$name
-                  zip -r $zipname $plugin/$name
+                  cp -r "$object" $outdir/$plugin/$name
+                  zip -r $zipname $outdir/$plugin/$name
                 done
               ' find-sh {} + ;
             else
