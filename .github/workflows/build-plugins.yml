@@ -202,9 +202,9 @@ jobs:
                   zip -r $zipname $plugin/$name
                 done
               ' find-sh {} + ;
-            else
-              printf "defaults.txt found in defaults folder, please remove either defaults.txt or the defaults folder.\n"
-              exit 1
+            # else
+            #   printf "defaults.txt found in defaults folder, please remove either defaults.txt or the defaults folder.\n"
+            #   exit 1
             fi
             cd "$workingdir"
           fi
