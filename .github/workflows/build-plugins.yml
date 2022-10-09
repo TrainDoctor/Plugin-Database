@@ -199,7 +199,7 @@ jobs:
                   outdir="/tmp/output"
                   name="$(basename $object)"
                   sudo cp -r "$object" $outdir/$plugin/$name
-                  defaults+=($name)
+                  defaults+=("$name")
                   export defaults="${defaults[@]}"
                 done
               ' find-sh {} + ;
