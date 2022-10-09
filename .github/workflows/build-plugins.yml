@@ -188,18 +188,22 @@ jobs:
           fi
 
           if [ ! -z "$hasdefaults" ]; then
+            workingdir=$PWD
+            cd $plugin/defaults
             if [ ! -f "defaults.txt" ]; then
               find $plugin/defaults -mindepth 1 -maxdepth 2 -type d,f -name '*' -exec sh -c '
                 for object do
+                  plugin="$2"
                   name="$(basename $object)"
                   cp -r "$object" $plugin/$name
                   zip -r $zipname $plugin/$name
                 done
-              ' find-sh {} + ;
+              ' find-sh {} $plugin + ;
             else
               printf "defaults.txt found in defaults folder, please remove either defaults.txt or the defaults folder.\n"
               exit 1
             fi
+            cd "$workingdir"
           fi
 
           # Check if other files exist, and if they do, add them
