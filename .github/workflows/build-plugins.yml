@@ -203,8 +203,8 @@ jobs:
                   sudo mv "$object" $outdir/$plugin/$name
                   moved=$?
                   echo "$moved"
-                  if [ $moved -e 0 ]; then
-                    cd $workingdir
+                  cd $workingdir
+                  if [ "$moved" == "0" ]; then
                     zip -r $zipname $plugin/$name
                   fi
                 done
