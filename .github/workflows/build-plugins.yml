@@ -42,7 +42,7 @@ jobs:
 
     - name: Cache Docker images
       if: ${{ !env.ACT }}
-      uses: yetanalytics/action-docker-layer-caching@4a00d788554169f6d490423b5d27e8308e0d551b
+      uses: jpribyl/action-docker-layer-caching@7589ac31d71a78324955d0c05c4e63f970799421
 
     - name: Login to GitHub Container Registry
       run: |
