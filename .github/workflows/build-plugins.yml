@@ -52,7 +52,7 @@ jobs:
 
     - name: Wait for other runs to complete
       if: ${{ !env.ACT }}
-      uses: softprops/turnstyle@8db075d65b19bf94e6e8687b504db69938dc3c65
+      uses: pau1ocampos/turnstyle@17e7c2e349edeb2fc92d15e99f389c6011e02956
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
