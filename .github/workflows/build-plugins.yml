@@ -204,7 +204,7 @@ jobs:
                   moved="$?"
                   echo "moved = $moved"
                   cd $workingdir
-                  if [[ "$moved" == "0" ]]; then
+                  if [ "$moved" = "0" ]; then
                     zip -r $zipname $plugin/$name
                   fi
                 done
