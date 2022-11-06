@@ -201,7 +201,7 @@ jobs:
                   name="$(basename $object)"
                   echo "$object = object, name = $name"
                   sudo mv "$object" $outdir/$plugin/$name
-                  moved=$?
+                  moved="$?"
                   echo "$moved"
                   cd $workingdir
                   if [ "$moved" == "0" ]; then
