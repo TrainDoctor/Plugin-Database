@@ -155,6 +155,7 @@ jobs:
         
     - name: Zip Plugins
       run: |
+        set -x
         shopt -s dotglob
         mkdir -p /tmp/zips/
         mkdir -p /tmp/output/
