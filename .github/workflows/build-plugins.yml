@@ -199,12 +199,12 @@ jobs:
                 for object do
                   outdir="/tmp/output"
                   name="$(basename $object)"
-                  echo "$object = object, name = $name"
+                  echo "object = $object, name = $name"
                   sudo mv "$object" $outdir/$plugin/$name
                   moved="$?"
-                  echo "$moved"
+                  echo "moved = $moved"
                   cd $workingdir
-                  if [ "$moved" == "0" ]; then
+                  if [[ "$moved" == "0" ]]; then
                     zip -r $zipname $plugin/$name
                   fi
                 done
