@@ -195,17 +195,19 @@ jobs:
             export plugin="$plugin"
             export zipname="$zipname"
             if [ ! -f "defaults.txt" ]; then
-              find . -mindepth 1 -type d,f -name '*' -exec sh -c '
+              find . -mindepth 1 -type d,f -name '*' -exec bash -c '
                 for object do
                   outdir="/tmp/output"
                   name="$(basename $object)"
                   echo "object = $object, name = $name"
-                  sudo mv "$object" $outdir/$plugin/$name
-                  moved="$?"
-                  echo "moved = $moved"
-                  cd $workingdir
-                  if [ "$moved" = "0" ]; then
-                    zip -r $zipname $plugin/$name
+                  if [ -e "$object" ]; then
+                    sudo mv "$object" $outdir/$plugin/$name
+                    moved="$?"
+                    # echo "moved = $moved"
+                    cd $workingdir
+                    if [ "$moved" = "0" ]; then
+                      zip -r $zipname $plugin/$name
+                    fi
                   fi
                 done
               ' find-sh {} + ;
