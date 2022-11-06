@@ -199,7 +199,9 @@ jobs:
                 for object do
                   outdir="/tmp/output"
                   name="$(basename $object)"
-                  sudo cp -r "$object" $outdir/$plugin/$name
+                  echo "$object = object, $name = $name"
+                  sudo mv "$object" $outdir/$plugin/$name
+                  echo $?
                   cd $workingdir
                   zip -r $zipname $plugin/$name
                 done
