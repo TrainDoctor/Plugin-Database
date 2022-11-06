@@ -199,11 +199,14 @@ jobs:
                 for object do
                   outdir="/tmp/output"
                   name="$(basename $object)"
-                  echo "$object = object, $name = $name"
+                  echo "$object = object, name = $name"
                   sudo mv "$object" $outdir/$plugin/$name
-                  echo $?
-                  cd $workingdir
-                  zip -r $zipname $plugin/$name
+                  moved=$?
+                  echo "$moved"
+                  if [[ "$moved" == 0 ]]; then
+                    cd $workingdir
+                    zip -r $zipname $plugin/$name
+                  fi
                 done
               ' find-sh {} + ;
             else
