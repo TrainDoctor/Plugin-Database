@@ -18,14 +18,15 @@ on:
         type: string
         required: false
       force_revision:
-        description: Force a revision for for a plugin upload (used to fix issues caused by CI.)
         type: boolean
+        description: Force a revision for for a plugin upload (used to fix issues caused by CI.)
       test_build:
         type: boolean
         description: Build pre-selected list of plugins for testing. They will not be uploaded.
 
 env:
   still_upload: ${{ inputs.upload }}
+  revision_force: ${{ inputs.force_revision }}
   testing: ${{ inputs.test_build }}
   testing_plugins: "Bluetooth ControllerTools SDH-AudioLoader SDH-CssLoader moondeck memory-deck Fantastic"
 
@@ -217,7 +218,7 @@ jobs:
         echo "::endgroup::"
 
     - name: Append revision to force update
-      if: ${{ inputs.force_override == true }}
+      if: ${{ env.testing == 'true' }}
       run: |
         echo "::notice::This run was manually to force an appended revision. Appending a revision to the plugin version."
         echo "::group::Appending revision to plugin $plugin"
