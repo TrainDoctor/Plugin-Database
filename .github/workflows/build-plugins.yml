@@ -218,7 +218,7 @@ jobs:
         echo "::endgroup::"
 
     - name: Append revision to force update
-      if: ${{ env.testing == 'true' }}
+      if: ${{ env.revision_force == 'true' }}
       run: |
         echo "::notice::This run was manually to force an appended revision. Appending a revision to the plugin version."
         echo "::group::Appending revision to plugin $plugin"
