@@ -17,6 +17,9 @@ on:
         description: Whitespace-separated list of plugin names to be built and uploaded. Enter "#all" to build and upload all plugins. Leave blank to use the default behavior.
         type: string
         required: false
+      force_revision:
+        description: Force a revision for for a plugin upload (used to fix issues caused by CI.)
+        type: boolean
       test_build:
         type: boolean
         description: Build pre-selected list of plugins for testing. They will not be uploaded.
@@ -205,6 +208,31 @@ jobs:
         VERSION=$(jq -r '.version' $PACKAGE_FILE)
         NEW_VERSION="$VERSION-$SHA"
 
+        echo "::notice::Going from $VERSION to $NEW_VERSION"
+
+        tmp=$(mktemp)
+        jq --arg newversion "$NEW_VERSION" '.version = $newversion' $PACKAGE_FILE > $tmp
+        mv $tmp $PACKAGE_FILE
+
+        echo "::endgroup::"
+
+    - name: Append revision to force update
+      if: ${{ inputs.force_override == true }}
+      run: |
+        echo "::notice::This run was manually to force an appended revision. Appending a revision to the plugin version."
+        echo "::group::Appending revision to plugin $plugin"
+
+        PACKAGE_FILE="plugins/$plugin/package.json"
+
+        PREV_REVISION=$($(jq -r '.version' $PACKAGE_FILE) | sed -e s|[0-9]+(\.[0-9]+)-|| )
+        VERSION=$(jq -r '.version' $PACKAGE_FILE)
+        if [[ -z "$PREV_REVISION" ]]; then
+          REVISION="1"
+        else
+          REVISION=$(($PREV_REVISION + 1))
+        fi
+        NEW_VERSION="$VERSION-$REVISION"
+        
         echo "::notice::Going from $VERSION to $NEW_VERSION"
 
         tmp=$(mktemp)
