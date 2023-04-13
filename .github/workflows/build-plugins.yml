@@ -225,8 +225,8 @@ jobs:
 
         PACKAGE_FILE="plugins/$plugin/package.json"
 
-        PREV_REVISION=$($(jq -r '.version' $PACKAGE_FILE) | sed -e s|[0-9]+(\.[0-9]+)-|| )
         VERSION=$(jq -r '.version' $PACKAGE_FILE)
+        PREV_REVISION=$($VERSION | sed -e 's|[0-9]+(\.[0-9]+)-||')
         if [[ -z "$PREV_REVISION" ]]; then
           REVISION="1"
         else
