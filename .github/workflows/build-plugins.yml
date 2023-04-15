@@ -234,6 +234,7 @@ jobs:
         else
           REVISION=$(($PREV_REVISION + 1))
         fi
+        echo "Revision: $REVISION"
         NEW_VERSION="$VERSION-$REVISION"
         echo "New revision: $NEW_REVISION"
         
