@@ -236,7 +236,7 @@ jobs:
           REVISION=$(($PREV_REVISION + 1))
         fi
         echo "Revision: $REVISION"
-        NEW_VERSION="$VERSION-$REVISION"
+        NEW_VERSION="$VERSION_WO_REVISION-$REVISION"
         echo "New version: $NEW_VERISION"
         
         echo "::notice::Going from $VERSION to $NEW_VERSION"
