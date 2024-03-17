@@ -355,6 +355,15 @@ jobs:
                 -F "image=$PLUGIN_IMAGE" \
                 -F "file=@$artifact" ${STORE_URL}/__submit
         }
+        
+        uploadingToProduction=$(if [[ "${STORE_URL}" =~ "testing" ]]; then true || false; fi  )
+
+        if [[ "$uploadingToProduction" == "true" ]]; then
+          curl -X POST -H "Authorization: ${STORE_SECRET}" \
+            -H 'Content-Type: application/json' \
+            -d "{\"id\": ${PLUGIN_ID}}" \
+            ${STORE_URL}/__delete
+        fi
 
         shouldUpload=$(query_plugin_json '.publish | any(.tags[] == "dnu"; .) | not')
 
